@@ -1,0 +1,99 @@
+User
+Movies
+TV Series
+-- Sports
+History
+-- Clients
+-- Payment&Plans
+
+
+
+Table:User
+user_id primary_key
+email
+username
+mobile_number
+date_time_created
+
+
+Table: Content
+content_id primary_key
+content_name
+desc
+video_content 
+duration
+date_time_added
+
+
+Table: Movie
+movie_id primary_key
+movie_name
+
+content forgin_key[Content] One to One
+accisibility [default/standard/premium]
+
+
+MoviesLanguage
+movie fk
+content fk
+language enum[t/e/...]
+
+Table:Tv_Series
+series_id primary_key
+series_name
+accisibility [default/standard/premium]
+
+
+Table: Season
+season_id primary_key
+season_name
+series_id forign_key[Tv_Serial] Many-to-one
+
+
+Table: Episode
+episode_id primary_key
+episode_name
+episode_number
+season_id forign_key[Season] Many-to-one
+content forign_key[Content] One-to-one
+
+
+Table: History
+user_id forign_key[User] Many-to-many
+content_id forign_key[Content] Many-to-many
+duration_watched
+
+
+Table: Promo
+promo_id primary_key
+promo_content forign_key[content] Many-to-One
+promo_to forign_key[content] One-to-one
+
+
+Table: Plans
+plan_id primary_key
+plan_name
+cost
+type [standard/premium]
+validity_pediord
+
+
+Table: Subscription
+user_id forign_key [User] one-to-one
+plan_id forignKey [Plan] many-to-one
+dt_subscribed
+
+
+Table: Audio
+language 
+audio
+subtitle
+content [Content]forgin_key
+
+SELECT series.name, COUNT(series.name) as episode_count
+FROM episodes
+JOIN season ON (episodes.season_id=season.season_id)
+JOIN Tv_Series ON (Tv_Series.series_id=season.series_id)
+GROUP BY series.name
+HAVING Count(series.name>=20)
+ORDER BY episode_count DESC
